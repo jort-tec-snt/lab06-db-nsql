@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Social Media | Plataforma Social</title>
+    <!-- Material Icons -->
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+    />
+    <!-- Estilos de diseño propios -->
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+
+  <body>
+    <!-- 1. Navegación Superior Fija y Minimalista -->
+    <header class="navbar">
+      <div class="container">
+        <div class="nav-wrapper">
+          <a href="/" class="brand-logo-group">
+            <span class="brand-icon">
+              <i class="material-icons">feed</i>
+            </span>
+            <span>
+              <span class="brand-name-main">Social</span><span class="brand-name-accent">Media</span>
+            </span>
+          </a>
+
+          <nav>
+            <ul class="nav-menu">
+              <li>
+                <a href="/" class="nav-link active">
+                  <i class="material-icons">home</i>
+                  <span>Inicio</span>
+                </a>
+              </li>
+              <li>
+                <a href="/posts" class="nav-link">
+                  <i class="material-icons">view_quilt</i>
+                  <span>Publicaciones</span>
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <!-- Contenido Principal: Hero y Resumen -->
+    <main class="main-content">
+      <div class="container">
+        <section class="hero-box">
+          <div class="hero-pill">
+            <span class="pulse-dot-green"></span>
+            <span>DAWA • Laboratorio 06 &bull; MongoDB NoSQL</span>
+          </div>
+
+          <h1 class="hero-title-main">
+            Plataforma Social & <br />
+            <span>Feed de Publicaciones</span>
+          </h1>
+
+          <p class="hero-desc">
+            Espacio inmersivo y moderno diseñado para la gestión y exploración de publicaciones 
+            en tiempo real conectadas a MongoDB.
+          </p>
+
+          <div class="hero-btn-row">
+            <a href="/posts" class="btn btn-cta-green btn-large">
+              <i class="material-icons">view_quilt</i>
+              <span>Ver Publicaciones</span>
+            </a>
+            <a href="/posts/new" class="btn btn-secondary-dark btn-large">
+              <i class="material-icons">add</i>
+              <span>Nuevo Post</span>
+            </a>
+          </div>
+
+          <!-- Cuadrícula de Arquitectura Técnica -->
+          <div class="highlights-grid">
+            <div class="highlight-card">
+              <div class="highlight-icon-box">
+                <i class="material-icons">dns</i>
+              </div>
+              <h3>MongoDB NoSQL</h3>
+              <p>Colecciones modeladas con Mongoose, índices de alto rendimiento y marcas temporales automáticas.</p>
+            </div>
+
+            <div class="highlight-card">
+              <div class="highlight-icon-box">
+                <i class="material-icons">group</i>
+              </div>
+              <h3>Asociación de Autores</h3>
+              <p>Relaciones referenciales mediante ObjectId con población dinámica en cada consulta.</p>
+            </div>
+
+            <div class="highlight-card">
+              <div class="highlight-icon-box">
+                <i class="material-icons">sync_alt</i>
+              </div>
+              <h3>Gestión CRUD</h3>
+              <p>Ciclo de vida completo: lectura, creación, actualización y eliminación de publicaciones.</p>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <!-- 4. Pie de Página (Footer) -->
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-inner">
+          <div class="footer-left">
+            <span>Social Media Platform &bull; Plataforma Social / Feed de Publicaciones</span>
+          </div>
+          <div class="footer-right">
+            <span>Laboratorio 06 DAWA &bull; <strong>Tecsup 2026</strong></span>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

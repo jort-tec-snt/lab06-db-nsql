@@ -1,0 +1,1001 @@
+/* ==========================================================================
+   PLATAFORMA SOCIAL / FEED DE PUBLICACIONES
+   Especificación de Diseño Frontend:
+   - Fondo General: Negro mate / Gris ultra oscuro (#0F1117)
+   - Superficies / Tarjetas: Gris oscuro (#161924)
+   - Acentos: Verde neón vibrante (#00C897)
+   - Tipografía: Inter / Sans-serif de alta legibilidad
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+  /* Paleta Base */
+  --bg-body: #0F1117;
+  --bg-card: #161924;
+  --bg-card-hover: #1c2130;
+  --bg-input: #10131d;
+  --bg-tag: rgba(0, 200, 151, 0.08);
+
+  /* Bordes y Líneas Difuminadas */
+  --border-subtle: rgba(255, 255, 255, 0.06);
+  --border-card: rgba(255, 255, 255, 0.08);
+  --border-card-hover: rgba(0, 200, 151, 0.35);
+  --border-input: rgba(255, 255, 255, 0.12);
+
+  /* Acento Verde Neón Vibrante */
+  --accent-green: #00C897;
+  --accent-green-hover: #00e0a9;
+  --accent-green-glow: 0 4px 18px rgba(0, 200, 151, 0.28);
+  --accent-green-subtle: rgba(0, 200, 151, 0.12);
+  --accent-green-border: rgba(0, 200, 151, 0.25);
+
+  /* Tipografía & Contrastes */
+  --text-primary: #FFFFFF;
+  --text-secondary: #9CA3AF;
+  --text-muted: #6B7280;
+  --text-light: #E5E7EB;
+
+  /* Peligro / Eliminar */
+  --color-danger: #EF4444;
+  --color-danger-hover: #F87171;
+  --color-danger-subtle: rgba(239, 68, 68, 0.1);
+  --border-danger: rgba(239, 68, 68, 0.25);
+
+  /* Sombras Suaves */
+  --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.35);
+  --shadow-card-hover: 0 10px 28px rgba(0, 0, 0, 0.5), 0 0 20px rgba(0, 200, 151, 0.12);
+  --shadow-btn: 0 2px 10px rgba(0, 200, 151, 0.25);
+
+  /* Radio & Transiciones */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-full: 9999px;
+  --transition: all 0.2s ease-in-out;
+}
+
+/* Reset y Base Inmersiva */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: var(--bg-body);
+  color: var(--text-primary);
+  line-height: 1.6;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+/* Contenedor Fluido */
+.container {
+  width: 100%;
+  max-width: 1240px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
+.main-content {
+  flex: 1 0 auto;
+  padding: 2.75rem 0 4.5rem;
+}
+
+/* ==========================================================================
+   1. NAVEGACIÓN SUPERIOR
+   Barra superior limpia, minimalista y fija
+   ========================================================================== */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background-color: rgba(15, 17, 23, 0.94);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border-subtle);
+  height: 68px;
+  display: flex;
+  align-items: center;
+}
+
+.navbar .nav-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.brand-logo-group {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 1.25rem;
+  letter-spacing: -0.02em;
+}
+
+.brand-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-md);
+  background: var(--bg-card);
+  border: 1px solid var(--accent-green-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent-green);
+  transition: var(--transition);
+}
+
+.brand-icon .material-icons {
+  font-size: 20px;
+}
+
+.brand-logo-group:hover .brand-icon {
+  background: var(--accent-green);
+  color: #0F1117;
+  box-shadow: var(--accent-green-glow);
+}
+
+.brand-name-main {
+  color: var(--text-primary);
+  font-weight: 800;
+}
+
+.brand-name-accent {
+  color: var(--accent-green);
+  font-weight: 800;
+}
+
+/* Enlaces directos de navegación */
+.nav-menu {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  list-style: none;
+}
+
+.nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 0.9rem;
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  font-size: 0.925rem;
+  font-weight: 500;
+  transition: var(--transition);
+}
+
+.nav-link:hover {
+  color: var(--text-primary);
+  background-color: rgba(255, 255, 255, 0.04);
+}
+
+.nav-link.active {
+  color: var(--accent-green);
+  background-color: var(--accent-green-subtle);
+  font-weight: 600;
+}
+
+.nav-link .material-icons {
+  font-size: 18px;
+}
+
+/* ==========================================================================
+   2. BOTONES Y ACCIONES
+   Acento verde brillante (#00C897) y esquinas redondeadas
+   ========================================================================== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.25rem;
+  font-family: inherit;
+  font-size: 0.925rem;
+  font-weight: 600;
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  cursor: pointer;
+  line-height: 1;
+  white-space: nowrap;
+  transition: var(--transition);
+  text-decoration: none;
+}
+
+.btn .material-icons {
+  font-size: 19px;
+}
+
+/* Botón Principal: Verde Neón (#00C897) */
+.btn-cta-green {
+  background-color: var(--accent-green);
+  color: #0B0E14;
+  font-weight: 700;
+  box-shadow: var(--shadow-btn);
+  border-radius: var(--radius-md);
+}
+
+.btn-cta-green:hover {
+  background-color: var(--accent-green-hover);
+  color: #000000;
+  transform: translateY(-1px);
+  box-shadow: var(--accent-green-glow);
+}
+
+/* Botón Secundario / Outline */
+.btn-secondary-dark {
+  background-color: transparent;
+  color: var(--text-light);
+  border: 1px solid var(--border-input);
+  border-radius: var(--radius-md);
+}
+
+.btn-secondary-dark:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: var(--text-primary);
+  transform: translateY(-1px);
+}
+
+/* Botón Editar de Tarjeta */
+.btn-card-edit {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background-color: transparent;
+  color: var(--text-secondary);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 0.4rem 0.75rem;
+  font-size: 0.825rem;
+  font-weight: 500;
+  transition: var(--transition);
+}
+
+.btn-card-edit:hover {
+  color: var(--accent-green);
+  border-color: var(--accent-green-border);
+  background-color: var(--accent-green-subtle);
+}
+
+.btn-card-edit .material-icons {
+  font-size: 16px;
+}
+
+/* Botón Eliminar de Tarjeta */
+.btn-card-delete {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background-color: transparent;
+  color: var(--text-muted);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 0.4rem 0.75rem;
+  font-size: 0.825rem;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: inherit;
+  transition: var(--transition);
+}
+
+.btn-card-delete:hover {
+  color: var(--color-danger);
+  border-color: var(--border-danger);
+  background-color: var(--color-danger-subtle);
+}
+
+.btn-card-delete .material-icons {
+  font-size: 16px;
+}
+
+/* ==========================================================================
+   3. CABECERA DE LA SECCIÓN DE PUBLICACIONES
+   - Título: "Gestor de Contenidos" en grande, bold, blanco puro
+   - Subtítulo: gris claro, tamaño compacto
+   - CTA: "Nuevo Post"
+   ========================================================================== */
+.feed-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-bottom: 2.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border-subtle);
+  flex-wrap: wrap;
+}
+
+.feed-header-content h1 {
+  font-size: 2.25rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+  margin-bottom: 0.4rem;
+}
+
+.feed-header-content p {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  font-weight: 400;
+}
+
+.feed-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* ==========================================================================
+   4. MURO DE PUBLICACIONES (GRID DE CONTENIDOS)
+   Cuadrícula fluida con whitespace generoso y tarjetas #161924
+   ========================================================================== */
+.posts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  gap: 2rem;
+}
+
+/* Tarjeta de Publicación */
+.post-card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-card);
+  transition: var(--transition);
+  position: relative;
+}
+
+.post-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--border-card-hover);
+  box-shadow: var(--shadow-card-hover);
+}
+
+/* Cabecera / Fecha de Tarjeta */
+.card-top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0.85rem 1.25rem 0.5rem;
+}
+
+.card-date-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.775rem;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.card-date-badge .material-icons {
+  font-size: 15px;
+  color: var(--accent-green);
+}
+
+/* Miniatura Multimedia */
+.post-media-container {
+  width: 100%;
+  height: 200px;
+  background-color: #0b0e14;
+  overflow: hidden;
+  position: relative;
+}
+
+.post-media-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.35s ease;
+}
+
+.post-card:hover .post-media-img {
+  transform: scale(1.03);
+}
+
+/* Cuerpo del Post */
+.post-body {
+  padding: 1.25rem 1.5rem 1rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.post-title {
+  color: var(--text-primary);
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.35;
+  margin-bottom: 0.6rem;
+  letter-spacing: -0.015em;
+}
+
+.post-excerpt {
+  color: var(--text-secondary);
+  font-size: 0.925rem;
+  line-height: 1.6;
+  margin-bottom: 1.15rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  flex: 1;
+}
+
+/* Etiquetas (Tags) en Verde Neón (#00C897) */
+.post-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-top: auto;
+  padding-top: 0.5rem;
+}
+
+.tag-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.65rem;
+  background-color: var(--bg-tag);
+  border: 1px solid var(--accent-green-border);
+  color: var(--accent-green);
+  border-radius: var(--radius-full);
+  font-size: 0.775rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  transition: var(--transition);
+}
+
+.tag-pill:hover {
+  background-color: rgba(0, 200, 151, 0.16);
+  border-color: var(--accent-green);
+}
+
+/* Pie de Tarjeta: Autor y Acciones */
+.post-footer {
+  padding: 1.1rem 1.5rem;
+  background-color: rgba(16, 20, 31, 0.75);
+  border-top: 1px solid var(--border-subtle);
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.author-block {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.author-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: #10131d;
+  border: 1px solid var(--accent-green-border);
+  color: var(--accent-green);
+  font-weight: 700;
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.author-meta {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.author-name {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.author-email {
+  font-size: 0.775rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.card-actions-bar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.65rem;
+  padding-top: 0.65rem;
+  border-top: 1px dashed var(--border-subtle);
+}
+
+/* Estado Vacío de Contenidos */
+.empty-feed {
+  background-color: var(--bg-card);
+  border: 1px dashed var(--border-card);
+  border-radius: var(--radius-lg);
+  padding: 4rem 2rem;
+  text-align: center;
+  max-width: 540px;
+  margin: 3rem auto;
+}
+
+.empty-feed-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background-color: var(--accent-green-subtle);
+  border: 1px solid var(--accent-green-border);
+  color: var(--accent-green);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.25rem;
+}
+
+.empty-feed-icon .material-icons {
+  font-size: 32px;
+}
+
+.empty-feed h3 {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.4rem;
+}
+
+.empty-feed p {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  margin-bottom: 1.75rem;
+}
+
+/* ==========================================================================
+   5. VISTA: INICIO / HERO
+   ========================================================================== */
+.hero-box {
+  padding: 4.5rem 0 3.5rem;
+  text-align: center;
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+.hero-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.95rem;
+  background-color: var(--accent-green-subtle);
+  border: 1px solid var(--accent-green-border);
+  border-radius: var(--radius-full);
+  color: var(--accent-green);
+  font-size: 0.825rem;
+  font-weight: 600;
+  margin-bottom: 1.75rem;
+}
+
+.pulse-dot-green {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: var(--accent-green);
+  box-shadow: 0 0 10px var(--accent-green);
+  animation: pulse-green 2s infinite;
+}
+
+@keyframes pulse-green {
+  0% { transform: scale(0.95); opacity: 0.6; }
+  50% { transform: scale(1.3); opacity: 1; }
+  100% { transform: scale(0.95); opacity: 0.6; }
+}
+
+.hero-title-main {
+  font-size: clamp(2.35rem, 5vw, 3.8rem);
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  margin-bottom: 1.25rem;
+}
+
+.hero-title-main span {
+  color: var(--accent-green);
+}
+
+.hero-desc {
+  font-size: 1.125rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 2.25rem;
+  max-width: 680px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.hero-btn-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 4rem;
+}
+
+.btn-large {
+  padding: 0.85rem 1.75rem;
+  font-size: 1rem;
+}
+
+/* Feature grid de la vista de inicio */
+.highlights-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1rem;
+  text-align: left;
+}
+
+.highlight-card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius-lg);
+  padding: 1.75rem;
+  transition: var(--transition);
+}
+
+.highlight-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--accent-green-border);
+  box-shadow: var(--shadow-card);
+}
+
+.highlight-icon-box {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+  background-color: var(--accent-green-subtle);
+  border: 1px solid var(--accent-green-border);
+  color: var(--accent-green);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.highlight-card h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.4rem;
+}
+
+.highlight-card p {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+/* ==========================================================================
+   6. VISTA: FORMULARIO (NUEVO / EDITAR POST)
+   ========================================================================== */
+.form-shell {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 1.5rem;
+}
+
+.back-link:hover {
+  color: var(--accent-green);
+}
+
+.back-link .material-icons {
+  font-size: 18px;
+}
+
+.form-panel {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius-lg);
+  padding: 2.25rem;
+  box-shadow: var(--shadow-card);
+}
+
+.form-panel-header {
+  margin-bottom: 2rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.form-panel-header h2 {
+  font-size: 1.65rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.form-panel-header h2 .material-icons {
+  color: var(--accent-green);
+}
+
+.form-panel-header p {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  margin-top: 0.35rem;
+}
+
+/* Alerta de Error */
+.form-alert-error {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  background-color: var(--color-danger-subtle);
+  border: 1px solid var(--border-danger);
+  color: #FCA5A5;
+  padding: 1rem 1.25rem;
+  border-radius: var(--radius-md);
+  margin-bottom: 1.75rem;
+  font-size: 0.9rem;
+}
+
+.form-alert-error .material-icons {
+  color: var(--color-danger);
+  font-size: 20px;
+  margin-top: 1px;
+}
+
+/* Campos de Formulario */
+.form-field {
+  margin-bottom: 1.5rem;
+}
+
+.field-label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-light);
+  margin-bottom: 0.5rem;
+}
+
+.field-label .asterisk {
+  color: var(--accent-green);
+  font-weight: 700;
+}
+
+.field-control {
+  width: 100%;
+  background-color: var(--bg-input);
+  border: 1px solid var(--border-input);
+  border-radius: var(--radius-md);
+  padding: 0.75rem 1rem;
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 0.95rem;
+  transition: var(--transition);
+}
+
+.field-control:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.field-control:focus {
+  outline: none;
+  border-color: var(--accent-green);
+  box-shadow: 0 0 0 3px rgba(0, 200, 151, 0.2);
+  background-color: #121624;
+}
+
+.field-control::placeholder {
+  color: var(--text-muted);
+}
+
+textarea.field-control {
+  min-height: 130px;
+  resize: vertical;
+  line-height: 1.6;
+}
+
+select.field-control {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2300C897'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 1.2rem;
+  padding-right: 2.75rem;
+  cursor: pointer;
+}
+
+select.field-control option {
+  background-color: var(--bg-card);
+  color: var(--text-primary);
+  padding: 0.5rem;
+}
+
+.field-hint {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-top: 0.4rem;
+}
+
+.field-hint .material-icons {
+  font-size: 14px;
+}
+
+/* Vista previa de imagen */
+.media-preview-box {
+  margin-top: 0.75rem;
+  display: none;
+  background-color: var(--bg-input);
+  border: 1px dashed var(--border-input);
+  border-radius: var(--radius-md);
+  padding: 0.75rem;
+  max-width: 320px;
+}
+
+.media-preview-box.is-active {
+  display: block;
+}
+
+.preview-label {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.preview-img-frame {
+  width: 100%;
+  height: 140px;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background-color: #000;
+}
+
+.preview-img-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.form-btn-bar {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 2.25rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-subtle);
+  flex-wrap: wrap;
+}
+
+/* ==========================================================================
+   7. PIE DE PÁGINA (FOOTER)
+   Discreto, alineado a los extremos inferior izquierdo e inferior derecho
+   ========================================================================== */
+.footer {
+  margin-top: auto;
+  background-color: #0b0e14;
+  border-top: 1px solid var(--border-subtle);
+  padding: 2rem 0;
+  font-size: 0.875rem;
+  color: var(--text-muted);
+}
+
+.footer-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+}
+
+.footer-left {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.footer-right {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-muted);
+}
+
+.footer-right strong {
+  color: var(--text-secondary);
+}
+
+/* ==========================================================================
+   8. RESPONSIVE
+   ========================================================================== */
+@media (max-width: 768px) {
+  .container {
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+  }
+
+  .navbar {
+    height: auto;
+    padding: 0.75rem 0;
+  }
+
+  .navbar .nav-wrapper {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .feed-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .posts-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .form-panel {
+    padding: 1.5rem;
+  }
+
+  .footer-inner {
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+  }
+}

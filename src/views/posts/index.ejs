@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gestor de Contenidos | Social Media</title>
+    <!-- Material Icons (iconos minimalistas) -->
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+    />
+    <!-- Estilos de diseño propios -->
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+
+  <body>
+    <!-- 1. Navegación Superior Fija y Minimalista -->
+    <header class="navbar">
+      <div class="container">
+        <div class="nav-wrapper">
+          <a href="/" class="brand-logo-group">
+            <span class="brand-icon">
+              <i class="material-icons">feed</i>
+            </span>
+            <span>
+              <span class="brand-name-main">Social</span><span class="brand-name-accent">Media</span>
+            </span>
+          </a>
+
+          <nav>
+            <ul class="nav-menu">
+              <li>
+                <a href="/" class="nav-link">
+                  <i class="material-icons">home</i>
+                  <span>Inicio</span>
+                </a>
+              </li>
+              <li>
+                <a href="/posts" class="nav-link active">
+                  <i class="material-icons">view_quilt</i>
+                  <span>Publicaciones</span>
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <!-- Contenido Principal: Feed Inmersivo -->
+    <main class="main-content">
+      <div class="container">
+        <!-- 2. Cabecera de la Sección de Publicaciones -->
+        <section class="feed-header">
+          <div class="feed-header-content">
+            <h1>Gestor de Contenidos</h1>
+            <p>Explora las publicaciones registradas en la base de datos MongoDB.</p>
+          </div>
+
+          <div class="feed-header-actions">
+            <a href="/posts/new" class="btn btn-cta-green">
+              <i class="material-icons">add</i>
+              <span>Nuevo Post</span>
+            </a>
+          </div>
+        </section>
+
+        <!-- Estado vacío si no hay posts en la base de datos -->
+        <% if (posts.length === 0) { %>
+        <section class="empty-feed">
+          <div class="empty-feed-icon">
+            <i class="material-icons">inbox</i>
+          </div>
+          <h3>Aún no hay publicaciones</h3>
+          <p>La colección de publicaciones en MongoDB está vacía. Crea el primer post para comenzar el feed.</p>
+          <a href="/posts/new" class="btn btn-cta-green">
+            <i class="material-icons">add</i>
+            <span>Nuevo Post</span>
+          </a>
+        </section>
+        <% } %>
+
+        <!-- 3. Muro de Publicaciones (Grid de Contenidos) -->
+        <div class="posts-grid">
+          <% posts.forEach((post) => { %>
+          <article class="post-card">
+            <!-- Cabecera de Tarjeta: Fecha con ícono de reloj/calendario -->
+            <div class="card-top-bar">
+              <span class="card-date-badge">
+                <i class="material-icons">schedule</i>
+                <span><%= new Date(post.createdAt).toLocaleDateString("es-PE", { day: '2-digit', month: 'short', year: 'numeric' }) %></span>
+              </span>
+            </div>
+
+            <!-- Contenido Multimedia (Opcional según el post) -->
+            <% if (post.imageUrl && post.imageUrl.trim() !== '') { %>
+            <div class="post-media-container">
+              <img
+                class="post-media-img"
+                src="<%= post.imageUrl %>"
+                alt="Miniatura de <%= post.title %>"
+                loading="lazy"
+                onerror="this.onerror=null; this.src='https://placehold.co/600x360/161924/00C897?text=Social+Media';"
+              />
+            </div>
+            <% } %>
+
+            <!-- Cuerpo del Post: Título principal en negrita blanca + subtítulo/contenido -->
+            <div class="post-body">
+              <h2 class="post-title"><%= post.title %></h2>
+              <p class="post-excerpt"><%= post.content %></p>
+
+              <!-- Etiquetas (Tags): Píldoras con fondo oscuro translúcido y texto en verde neón (#00C897) -->
+              <% if (post.hashtags && post.hashtags.length > 0) { %>
+              <div class="post-tags">
+                <% post.hashtags.forEach((tag) => { %>
+                  <% if (tag && tag.trim()) { %>
+                    <% tag.split(' ').forEach((subtag) => { %>
+                      <% if (subtag && subtag.trim()) { %>
+                      <span class="tag-pill">#<%= subtag.trim().replace(/^#/, '') %></span>
+                      <% } %>
+                    <% }) %>
+                  <% } %>
+                <% }) %>
+              </div>
+              <% } %>
+            </div>
+
+            <!-- Pie de Tarjeta: Información del Autor y Acciones de la Tarjeta -->
+            <div class="post-footer">
+              <div class="author-block">
+                <div class="author-avatar">
+                  <%= post.user && post.user.name ? post.user.name.charAt(0).toUpperCase() : 'U' %>
+                </div>
+                <div class="author-meta">
+                  <span class="author-name">
+                    <%= post.user ? `${post.user.name} ${post.user.lastName}` : 'Autor anónimo' %>
+                  </span>
+                  <span class="author-email">
+                    <%= post.user?.email || 'usuario@socialmedia.local' %>
+                  </span>
+                </div>
+              </div>
+
+              <!-- Acciones de la Tarjeta (Editar con ícono de lápiz y Eliminar con ícono de papelera) -->
+              <div class="card-actions-bar">
+                <a href="/posts/<%= post._id %>/edit" class="btn-card-edit" title="Editar publicación">
+                  <i class="material-icons">edit</i>
+                  <span>Editar</span>
+                </a>
+
+                <form
+                  action="/posts/<%= post._id %>/delete"
+                  method="POST"
+                  onsubmit="return confirm('¿Deseas eliminar este Post?')"
+                >
+                  <button class="btn-card-delete" type="submit" title="Eliminar publicación">
+                    <i class="material-icons">delete</i>
+                    <span>Eliminar</span>
+                  </button>
+                </form>
+              </div>
+            </div>
+          </article>
+          <% }) %>
+        </div>
+      </div>
+    </main>
+
+    <!-- 4. Pie de Página (Footer): Discreto, alineado a extremos inferior izquierdo y derecho -->
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-inner">
+          <div class="footer-left">
+            <span>Social Media Platform &bull; Plataforma Social / Feed de Publicaciones</span>
+          </div>
+          <div class="footer-right">
+            <span>Laboratorio 06 DAWA &bull; <strong>Tecsup 2026</strong></span>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

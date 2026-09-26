@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= title %> | Social Media</title>
+    <!-- Material Icons -->
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+    />
+    <!-- Estilos de diseño propios -->
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+
+  <body>
+    <!-- Navegación Superior Fija y Minimalista -->
+    <header class="navbar">
+      <div class="container">
+        <div class="nav-wrapper">
+          <a href="/" class="brand-logo-group">
+            <span class="brand-icon">
+              <i class="material-icons">feed</i>
+            </span>
+            <span>
+              <span class="brand-name-main">Social</span><span class="brand-name-accent">Media</span>
+            </span>
+          </a>
+
+          <nav>
+            <ul class="nav-menu">
+              <li>
+                <a href="/" class="nav-link">
+                  <i class="material-icons">home</i>
+                  <span>Inicio</span>
+                </a>
+              </li>
+              <li>
+                <a href="/posts" class="nav-link">
+                  <i class="material-icons">view_quilt</i>
+                  <span>Publicaciones</span>
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <!-- Contenido Principal -->
+    <main class="main-content">
+      <div class="container">
+        <div class="form-shell">
+          <!-- Enlace de regreso -->
+          <a href="/posts" class="back-link">
+            <i class="material-icons">arrow_back</i>
+            <span>Volver a Publicaciones</span>
+          </a>
+
+          <div class="form-panel">
+            <!-- Cabecera del formulario -->
+            <div class="form-panel-header">
+              <h2>
+                <i class="material-icons"><%= title.includes('Editar') ? 'edit' : 'add_box' %></i>
+                <span><%= title %></span>
+              </h2>
+              <p>Completa la información requerida para registrar el post en MongoDB.</p>
+            </div>
+
+            <!-- Alerta de Error si ocurre -->
+            <% if (error) { %>
+            <div class="form-alert-error" role="alert">
+              <i class="material-icons">error_outline</i>
+              <div>
+                <strong>Error al procesar:</strong>
+                <p><%= error %></p>
+              </div>
+            </div>
+            <% } %>
+
+            <!-- Formulario CRUD -->
+            <form action="<%= action %>" method="POST" id="postForm" novalidate>
+              <!-- Campo: title -->
+              <div class="form-field">
+                <label for="title" class="field-label">
+                  Título del Post <span class="asterisk">*</span>
+                </label>
+                <input
+                  id="title"
+                  name="title"
+                  class="field-control"
+                  type="text"
+                  minlength="5"
+                  maxlength="30"
+                  required
+                  placeholder="Ej. Base de Dato No Relacionales"
+                  value="<%= post.title || '' %>"
+                />
+                <div class="field-hint">
+                  <i class="material-icons">info</i>
+                  <span>Mínimo 5 y máximo 30 caracteres.</span>
+                </div>
+              </div>
+
+              <!-- Campo: content -->
+              <div class="form-field">
+                <label for="content" class="field-label">
+                  Contenido <span class="asterisk">*</span>
+                </label>
+                <textarea
+                  id="content"
+                  name="content"
+                  class="field-control"
+                  minlength="10"
+                  required
+                  rows="5"
+                  placeholder="Escribe el contenido o desarrollo del tema..."
+                ><%= post.content || '' %></textarea>
+                <div class="field-hint">
+                  <i class="material-icons">info</i>
+                  <span>Mínimo 10 caracteres obligatorios.</span>
+                </div>
+              </div>
+
+              <!-- Campo: userId -->
+              <div class="form-field">
+                <label for="userId" class="field-label">
+                  Autor <span class="asterisk">*</span>
+                </label>
+                <select id="userId" name="userId" class="field-control" required>
+                  <option value="" disabled <%= (!post.user && !post.userId) ? 'selected' : '' %>>
+                    Selecciona un autor
+                  </option>
+                  <% users.forEach((user) => { %>
+                  <option
+                    value="<%= user._id %>"
+                    <%= String(post.user?._id || post.user || post.userId || '') === String(user._id) ? 'selected' : '' %>
+                  >
+                    <%= user.name %> <%= user.lastName %> &bull; <%= user.email %>
+                  </option>
+                  <% }) %>
+                </select>
+                <div class="field-hint">
+                  <i class="material-icons">person</i>
+                  <span>Asigna el usuario que firma la publicación (ObjectId).</span>
+                </div>
+              </div>
+
+              <!-- Campo: hashtags -->
+              <div class="form-field">
+                <label for="hashtags" class="field-label">
+                  Hashtags (etiquetas)
+                </label>
+                <input
+                  id="hashtags"
+                  name="hashtags"
+                  class="field-control"
+                  type="text"
+                  placeholder="database, nosql, mongodb"
+                  value="<%= Array.isArray(post.hashtags) ? post.hashtags.join(', ') : (post.hashtags || '') %>"
+                />
+                <div class="field-hint">
+                  <i class="material-icons">tag</i>
+                  <span>Separados por comas o espacios.</span>
+                </div>
+              </div>
+
+              <!-- Campo: imageUrl -->
+              <div class="form-field">
+                <label for="imageUrl" class="field-label">
+                  URL de Imagen (Opcional)
+                </label>
+                <input
+                  id="imageUrl"
+                  name="imageUrl"
+                  class="field-control"
+                  type="url"
+                  placeholder="https://ejemplo.com/imagen.jpg"
+                  value="<%= post.imageUrl || '' %>"
+                />
+                <div class="field-hint">
+                  <i class="material-icons">image</i>
+                  <span>Enlace web directo a una miniatura ilustrativa.</span>
+                </div>
+
+                <!-- Previsualización dinámica -->
+                <div id="mediaPreviewBox" class="media-preview-box">
+                  <span class="preview-label">
+                    <i class="material-icons">visibility</i>
+                    <span>Vista previa:</span>
+                  </span>
+                  <div class="preview-img-frame">
+                    <img id="previewImg" src="" alt="Vista previa" />
+                  </div>
+                </div>
+              </div>
+
+              <!-- Acciones del Formulario -->
+              <div class="form-btn-bar">
+                <button class="btn btn-cta-green" type="submit">
+                  <i class="material-icons">save</i>
+                  <span><%= title.includes('Editar') ? 'Guardar Cambios' : 'Guardar Post' %></span>
+                </button>
+
+                <a href="/posts" class="btn btn-secondary-dark">
+                  <span>Cancelar</span>
+                </a>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Pie de Página (Footer) -->
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-inner">
+          <div class="footer-left">
+            <span>Social Media Platform &bull; Plataforma Social / Feed de Publicaciones</span>
+          </div>
+          <div class="footer-right">
+            <span>Laboratorio 06 DAWA &bull; <strong>Tecsup 2026</strong></span>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Script de previsualización -->
+    <script>
+      (function() {
+        const inputImageUrl = document.getElementById('imageUrl');
+        const previewBox = document.getElementById('mediaPreviewBox');
+        const previewImg = document.getElementById('previewImg');
+
+        function refreshPreview() {
+          const url = (inputImageUrl.value || '').trim();
+          if (url && (url.startsWith('http://') || url.startsWith('https://'))) {
+            previewImg.src = url;
+            previewImg.onload = function() {
+              previewBox.classList.add('is-active');
+            };
+            previewImg.onerror = function() {
+              previewBox.classList.remove('is-active');
+            };
+          } else {
+            previewBox.classList.remove('is-active');
+          }
+        }
+
+        if (inputImageUrl) {
+          inputImageUrl.addEventListener('input', refreshPreview);
+          refreshPreview();
+        }
+
+        const form = document.getElementById('postForm');
+        if (form) {
+          form.addEventListener('submit', function(e) {
+            const title = document.getElementById('title');
+            const content = document.getElementById('content');
+            const userId = document.getElementById('userId');
+
+            if (!title.value.trim() || title.value.trim().length < 5 || title.value.trim().length > 30) {
+              e.preventDefault();
+              title.focus();
+              alert('El título debe tener entre 5 y 30 caracteres.');
+              return;
+            }
+
+            if (!content.value.trim() || content.value.trim().length < 10) {
+              e.preventDefault();
+              content.focus();
+              alert('El contenido debe tener al menos 10 caracteres.');
+              return;
+            }
+
+            if (!userId.value) {
+              e.preventDefault();
+              userId.focus();
+              alert('Por favor selecciona un autor para el post.');
+              return;
+            }
+          });
+        }
+      })();
+    </script>
+  </body>
+</html>
